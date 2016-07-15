@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<earth></earth>
+
+<style>
+
+    .graticule {
+      fill: none;
+      stroke: #777;
+      stroke-opacity: .5;
+      stroke-width: .5px;
+      pointer-events: none;
+    }
+
+    .timezones {
+      fill: black;
+    }
+
+    .timezones :hover {
+      fill: red;
+    }
+
+    .boundary {
+      fill: none;
+      stroke: #fff;
+      stroke-width: .5px;
+      pointer-events: none;
+    }
+
+</style>
+
+<script src="d3.v3.min.js"></script>
+<script src="topojson.v1.min.js"></script>
+<script src="jquery-2.2.0.min.js"></script>
+
+
+<script>
+
+function creatingMap(){
+        var width = 960,
+        height = 960;
+
+    var projection = d3.geo.mercator()
+        .scale(width / 2 / Math.PI)
+        .translate([width / 2, height / 2])
+        .precision(.1);
+
+    var path = d3.geo.path()
+        .projection(projection);
+
+            // graticule is here
+    var graticule = d3.geo.graticule();
+
+    var svg = d3.select("earth").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.append("path")
+        .datum(graticule)
+        .attr("class", "graticule")
+        .attr("d", path);
+
+            // loading geo.json / json in dat case 
+    d3.json("zones.json", function(error, timezones) {
+      if (error) throw error;
+
+      path.projection(null);
+
+      svg.insert("g", ".graticule")
+          .attr("class", "timezones")
+        .selectAll("path")
+          .data(topojson.feature(timezones, timezones.objects.timezones).features)
+        .enter().append("path")
+          .attr("d", path)
+        .append("title")
+          .text(function(d) { return d.id; });
+
+
+      svg.insert("path", ".graticule")
+          .datum(topojson.mesh(timezones, timezones.objects.timezones, function(a, b) { return a !== b; }))
+          .attr("class", "boundary")
+          .attr("d", path);
+
+        });
+    d3.select(self.frameElement).style("height", height + "px");
+}
+
+
+
+
+    
+    $(document).ready(function(){
+      //  mainmy(); 
+         $.when(creatingMap()).then(zliczam());
+        
+    });
+    
+        var cords = [],
+            countrylist = [];
+    
+        function zliczam(){
+            let path = $('path');
+            let title = $('title');
+            var count = path.size();
+
+            title.each(function(index){
+                var i=0;
+                    countrylist[i] = title.text();
+                console.log("Nazwa: "+countrylist[index]); 
+                    i++;
+                    
+            });
+         
+           
+            
+            /*title.each(function(index){
+                    var div = path.offset();
+                        var i =0;
+                    cords[i] = [div.top, div.left];
+                    console.log("Cords: "+cords[i]);  
+                i++;
+            });
+            */
+                        $('path').click(function() {
+              var path = $( this ),
+                isWithTwo = path.is(function() {
+                  return $( "strong", this ).length === 2;
+                });
+              if ( path ) {
+                path.css( "fill", "green" );
+                  var namiary = path.offset();
+                  console.log(namiary.top + " " + namiary.left);
+              }
+            });
+         
+            
+
+             
+        }
+   
+    
+    
+    
+    </script>
+    
