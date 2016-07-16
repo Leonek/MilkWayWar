@@ -9,4 +9,5 @@ Leon:
 
 
 Michał:
-1.
+1. leogame.sql.gz
+2. SQL-Countries-Tabela.txt
