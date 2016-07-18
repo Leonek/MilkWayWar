@@ -11,6 +11,7 @@ var Comment = React.createClass({
     save: function(){
         this.props.updateCommentText(this.refs.newText.value, this.props.index);
         this.setState({editing: false});
+         console.log(this.refs.newText.value);
     },
     renderNormally: function(){
             return (
@@ -51,25 +52,26 @@ var Datas = React.createClass({
     },
     removeComment: function(i){
         var tab = this.state.comments;
-       tab.splice(i, 1);
+        tab.splice(i, 1);
         this.setState({comments:tab})
     },
     updateComment: function(newText, i){
         var tab = this.state.comments;
         tab[i] = newText;
         this.setState({comments: tab})
+       
     },
   
     
     eachComment: function(text,i){
         return (
-            <Comment key={i} index={i} updateCommentText={this.updateComment} deleteFromDatas={this.removeComment}>Default text</Comment>
+            <Comment key={i} index={i} updateCommentText={this.updateComment} deleteFromDatas={this.removeComment}>{text}</Comment>
         )
     },
     render : function (){
         return (
             <div>
-                <button onClick={this.add.bind(null, 'Default text')} className = "button-create">Dodaj</button>
+                <button onClick={this.add.bind(null, 'Default text')} className = "button-create create">Dodaj</button>
                 <div className="datas">
                     {this.state.comments.map(this.eachComment)}
                 </div>
@@ -79,9 +81,6 @@ var Datas = React.createClass({
        
     
 });
-
-
-
 
 ReactDOM.render(<Datas/>,document.getElementById('chat'));
 
