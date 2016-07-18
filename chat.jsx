@@ -11,7 +11,6 @@ var Comment = React.createClass({
     save: function(){
         this.props.updateCommentText(this.refs.newText.value, this.props.index);
         this.setState({editing: false});
-         console.log(this.refs.newText.value);
     },
     renderNormally: function(){
             return (
