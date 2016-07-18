@@ -11,3 +11,5 @@ Leon:
 Michał:
 1. leogame.sql.gz
 2. SQL-Countries-Tabela.txt
+3. Register.php
+4. RegisterDB.php
